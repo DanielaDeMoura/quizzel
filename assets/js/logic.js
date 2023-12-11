@@ -10,13 +10,14 @@ document.addEventListener("DOMContentLoaded", function () {
   let timerDuration = 100;
   let timer; 
 
+
   startButton.addEventListener("click", function () {
     startScreen.classList.add("hide");
     questionsScreen.classList.remove("hide");
     showQuestion();
-
     startTimer();
   });
+
   function startTimer() {
     timer = setInterval(function () {
       timerDuration--;
