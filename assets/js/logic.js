@@ -4,8 +4,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const questionsScreen = document.getElementById("questions");
   const questionTitle = document.getElementById("question-title");
   const choicesContainer = document.getElementById("choices");
+  document.getElementById("timer");
 
   let currentQuestionIndex = 0; // Track the current question index
+  let timerDuration = 60;
 
   startButton.addEventListener("click", function () {
     startScreen.classList.add("hide");
@@ -87,6 +89,36 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
+///// Timer - code for timer ////
+
+function handleChoice(choice, correctAnswer) {
+  
+  choicesContainer.addEventListener("click", function (event){
+    if (event.target.matches("button.choice")) {
+      if (choice === correctAnswer) 
+      {
+        console.log("that's correct");
+        hideFeedback();
+        showQuestion();
+      } else {
+        subtractTime();
+        console.log("That is inccorrect, please try again");
+        if (timer > 0) {
+          hideFeedback();
+          showQuestion();
+        } else {
+          hideFeedback();
+          goToEndScreen();
+        }
+      }
+    }
+  });
+}
+
+if (timerDuration <= 0) {
+  clearInterval(timer);
+  alert("time is up ")
+}
 
 
 const correctAudio = new Audio("./assets/sfx/correct.wav");
