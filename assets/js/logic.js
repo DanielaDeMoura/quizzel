@@ -4,16 +4,31 @@ document.addEventListener("DOMContentLoaded", function () {
   const questionsScreen = document.getElementById("questions");
   const questionTitle = document.getElementById("question-title");
   const choicesContainer = document.getElementById("choices");
-  document.getElementById("timer");
+  const timerDisplay = document.getElementById("timer");
 
-  let currentQuestionIndex = 0; // Track the current question index
-  let timerDuration = 60;
+  let currentQuestionIndex = 0;
+  let timerDuration = 100;
+  let timer; 
 
   startButton.addEventListener("click", function () {
     startScreen.classList.add("hide");
     questionsScreen.classList.remove("hide");
     showQuestion();
+
+    startTimer();
   });
+  function startTimer() {
+    timer = setInterval(function () {
+      timerDuration--;
+      if (timerDuration >= 0) {
+        timerDisplay.textContent = timerDuration;
+      } else {
+        clearInterval(timer);
+        goToEndScreen();
+      }
+    }, 1000);
+  }
+
 
   function showQuestion() {
     const currentQuestion = getQuestion(currentQuestionIndex);
@@ -69,62 +84,53 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function handleChoice(choice, correctAnswer) {
-// check if the answer is right
-    // log the chosen choice check if correct
-    console.log("Chosen:", choice);
-    console.log("Correct:", choice === correctAnswer);
-
-    // Move onto the next question or end the quiz if there aren't questions
-    currentQuestionIndex++;
-    if (currentQuestionIndex < questions.length) {
+    if (choice === correctAnswer) {
+      console.log("That's correct");
+      hideFeedback();
       showQuestion();
     } else {
-      endQuiz();
+      subtractTime();
+      console.log("That is incorrect, please try again");
+      if (timerDuration > 0) {
+        hideFeedback();
+        showQuestion();
+      } else {
+        hideFeedback();
+        goToEndScreen();
+      }
     }
   }
 
-  function endQuiz() {
+  function subtractTime() {
+   timerDuration -= 10;
 
+   if (timerDuration < 0) {
+    timerDuration = 0;
+   }
+   timerDisplay.textContent = timerDuration;
+  }
+
+  function hideFeedback() {
+    const feedbackDiv = document.getElementById("feedback");
+    feedbackDiv.textContent = "";
+    feedbackDiv.classList.add("hide");
+  }
+
+  function goToEndScreen() {
+    hideFeedback();
+    questionsScreen.classList.add("hide");
+    endQuiz();
+  }
+
+  function endQuiz() {
+    clearInterval(timer);
     console.log("Quiz complete 🥳🎉🎊");
   }
 });
 
-///// Timer - code for timer ////
-
-function handleChoice(choice, correctAnswer) {
-  
-  choicesContainer.addEventListener("click", function (event){
-    if (event.target.matches("button.choice")) {
-      if (choice === correctAnswer) 
-      {
-        console.log("that's correct");
-        hideFeedback();
-        showQuestion();
-      } else {
-        subtractTime();
-        console.log("That is inccorrect, please try again");
-        if (timer > 0) {
-          hideFeedback();
-          showQuestion();
-        } else {
-          hideFeedback();
-          goToEndScreen();
-        }
-      }
-    }
-  });
-}
-
-if (timerDuration <= 0) {
-  clearInterval(timer);
-  alert("time is up ")
-}
-
-
 const correctAudio = new Audio("./assets/sfx/correct.wav");
 const incorrectAudio = new Audio("./assets/sfx/incorrect.wav");
 
-// Example to play the audio when start button is clicked
 document.getElementById("start").addEventListener("click", function () {
   incorrectAudio.play();
 });
