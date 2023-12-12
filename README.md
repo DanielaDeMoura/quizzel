@@ -28,4 +28,8 @@ After completing the quiz, view your final score and submit your initials for th
 - Timed questions.
 - Highscores page to view and compare your scores with others.
 
+### images of the webapp:
 
+
+![screenshot of the quiz](<Screenshot 2023-12-12 at 04.04.04.png>)
+![sceenshot of the startpage](<Screenshot 2023-12-12 at 04.04.40.png>)
